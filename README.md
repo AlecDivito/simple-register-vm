@@ -19,6 +19,17 @@ A grouping of 32-bits is an Instructions.
 2. The remaining bits will be the Operands
 Using this design our opcodes can have up to 3 Operands (arguments)
 
+### What's an Opcode?
+
+A opcode is a command that is represented by a byte. In this virtual machine
+it will be possible to have up to 255 Opcodes
+
+### What are problems with the current implementation?
+
+If we were to load a number, we out only have enough space to store 2 bytes
+of data (16 bits) because 1 byte will specify the Opcode and 1 byte will
+specify the register to target 
+
 # Goals from Tutorial
 We want our VM to bee
 
