@@ -85,9 +85,13 @@ impl VM {
                 true
             }
             Opcode::JMPF => {
+                let target = self.registers[self.next_8_bits() as usize];
+                self.pc += target as usize;
                 true
             },
             Opcode::JMPB => {
+                let target = self.registers[self.next_8_bits() as usize];
+                self.pc -= target as usize;
                 true
             },
 
@@ -171,9 +175,28 @@ mod tests {
     #[test]
     fn test_jmp_opcode() {
         let mut test_vm = get_test_vm();
-        test_vm.registers[0] = 1;
+        test_vm.registers[0] = 3;
         test_vm.program = vec![7, 0, 0, 0];
         test_vm.run_once();
-        assert_eq!(test_vm.pc, 1);
+        assert_eq!(test_vm.pc, 3);
+    }
+
+    #[test]
+    fn test_jmpf_opcode() {
+        let mut test_vm = get_test_vm();
+        test_vm.registers[0] = 2;
+        test_vm.program = vec![8, 0, 0, 0, 6, 0, 0, 0];
+        test_vm.run_once();
+        assert_eq!(test_vm.pc, 4);
+    }
+
+    #[test]
+    fn test_jmpb_opcode() {
+        let mut test_vm = get_test_vm();
+        test_vm.pc = 4;
+        test_vm.registers[0] = 3;
+        test_vm.program = vec![6, 0, 0, 0, 9, 0, 0, 0];
+        test_vm.run_once();
+        assert_eq!(test_vm.pc, 3);
     }
 }

@@ -19,8 +19,7 @@ pub enum Opcode {
     /// Divide 2 registers together
     /// (ex. DIV $0 $1 $2, Divide register 0 and 1, store result in register 3)
     DIV,
-
-    /// jump stright to a new instruction
+    /// jump straight to a new instruction
     JMP,
     /// jump moves forward x amount of instructions relative to the program counter position
     /// (ex. JMP $0, the value inside of register 0 represents how many positions to move)
@@ -28,7 +27,6 @@ pub enum Opcode {
     /// jump moves backwards x amount of instructions relative to the program counter position
     /// (ex. JMP $0, the value inside of register 0 represents how many positions to move)
     JMPB,
-
     /// halt (stop) the currently running program
     HLT,
     /// Illegal opcode, opcode could not be found
