@@ -204,7 +204,7 @@ mod tests {
     }
 
     #[test]
-    fn test_opcode_hlt() {
+    fn test_hlt_opcode() {
         let mut test_vm = VM::new();
         let test_bytes = vec![0,0,0,0];
         test_vm.program = test_bytes;
@@ -213,7 +213,7 @@ mod tests {
     }
 
     #[test]
-    fn test_opcode_igl() {
+    fn test_igl_opcode() {
         let mut test_vm = VM::new();
         let test_bytes = vec![200,0,0,0];
         test_vm.program = test_bytes;
