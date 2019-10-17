@@ -186,6 +186,18 @@ impl VM {
         self.pc += 2;
         return result;
     }
+
+    pub fn add_byte(&mut self, byte: u8) {
+        self.program.push(byte);
+    }
+
+    pub fn get_instructions(&self) -> &Vec<u8> {
+        &self.program
+    }
+
+    pub fn get_registers(&self) -> &[i32]{
+        &self.registers
+    }
 }
 
 
