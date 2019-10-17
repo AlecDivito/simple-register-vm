@@ -6,7 +6,6 @@ pub enum Opcode {
     /// load a number into the specified register
     /// (ex. LOAD $0 #500, load 500 into register 0)
     LOAD,
-    
     /// Add 2 registers together
     /// (ex. ADD $0 $1 $2, Add register 0 and 1, store result in register 3)
     ADD,
@@ -27,6 +26,30 @@ pub enum Opcode {
     /// jump moves backwards x amount of instructions relative to the program counter position
     /// (ex. JMP $0, the value inside of register 0 represents how many positions to move)
     JMPB,
+    /// Equal, EQ $0 $1
+    /// Check if two values are equal
+    EQ,
+    /// Not Equal, NEQ $0 $1
+    /// Check if two values are not equal
+    NEQ,
+    /// Greater Then, GT $0 $1
+    /// Check if the left side is greater then the right side
+    GT,
+    /// Less Then, LT $0 $1
+    /// Check if the left side is less then the right side
+    LT,
+    /// Greater Then OR Equal To, GTEQ $0 $1
+    /// Check if the left side is greater then or equal to the right side
+    GTEQ,
+    /// Less Then OR Equal To, LTEQ $0 $1
+    /// Check if the left side is less then or equal to the right side
+    LTEQ,
+    /// Jump If Equal, JEQ $0
+    /// If the equal flag is true, jump to instruction
+    JEQ,
+    /// Jump If Not Equal, JNEQ $0
+    /// If the equal flag is false, jump to instruction
+    JNEQ,
     /// halt (stop) the currently running program
     HLT,
     /// Illegal opcode, opcode could not be found
@@ -45,6 +68,14 @@ impl From<u8> for Opcode {
             7 => return Opcode::JMP,
             8 => return Opcode::JMPF,
             9 => return Opcode::JMPB,
+            10 => return Opcode::EQ,
+            11 => return Opcode::NEQ,
+            12 => return Opcode::GT,
+            13 => return Opcode::LT,
+            14 => return Opcode::GTEQ,
+            15 => return Opcode::LTEQ,
+            16 => return Opcode::JEQ,
+            17 => return Opcode::JNEQ,
             _ => return Opcode::IGL
         }
     }
