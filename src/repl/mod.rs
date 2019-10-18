@@ -1,5 +1,6 @@
-use std::io::Write;
+use crate::assembler::program_parser::Program;
 use super::vm::VM;
+use std::io::Write;
 
 /// Read, Evaluate, and Print Loop
 /// Core structure for the REPL for the Assembler
@@ -11,24 +12,18 @@ pub struct REPL {
 }
 
 impl REPL {
-
     /// Creates and returns a new assembly REPL
     pub fn new() -> REPL {
         REPL {
             command_buffer: vec![],
-            vm: VM::new()
+            vm: VM::new(),
         }
     }
 
     pub fn run(&mut self) {
         println!("Welcome to simple VM lang!");
+        let mut buffer = String::new();
         loop {
-            // This allocates a new String in which to store whatever the user
-            // types each iteration.
-            // TODO: Figure out how create this outside of the loop and re-use
-            // it every iteration
-            let mut buffer = String::new();
-
             // Blocking call until the user types in a command
             let stdin = std::io::stdin();
 
@@ -39,47 +34,50 @@ impl REPL {
             std::io::stdout().flush().expect("Unable to flush stdout");
 
             // Here we'll look at the string the user gave us.
-            stdin.read_line(&mut buffer).expect("Unable to read line from user");
+            buffer.clear();
+            stdin
+                .read_line(&mut buffer)
+                .expect("Unable to read line from user");
             let buffer = buffer.trim();
-            
+
             // push command onto command stack
             self.command_buffer.push(buffer.to_string());
-            
+
             // check if command exists
             match buffer {
                 ".quit" => {
                     println!("Farewell! Have a great day!");
                     std::process::exit(0);
-                },
+                }
                 ".history" => {
                     for command in &self.command_buffer {
                         println!("{}", command);
                     }
-                },
+                }
                 ".program" => {
                     println!("Listing instructions currently in VM's program vector:");
                     for instruction in self.vm.get_instructions() {
                         println!("{}", instruction);
                     }
                     println!("End of Program Listing");
-                },
+                }
                 ".registers" => {
                     println!("Listing registers and all contents:");
                     println!("{:#?}", self.vm.get_registers());
                     println!("End of Register Listing");
-                },
+                }
                 _ => {
-                    let results = self.parse_hex(buffer);
-                    match results {
-                        Ok(bytes) => {
-                            for byte in bytes {
-                                self.vm.add_byte(byte);
-                            }
-                        },
-                        Err(_e) => {
-                            println!("Unable to decode hex string. Please enter 4 groups of 2 hex characters");
+                    let program = match Program::parse(buffer) {
+                        Ok(p) => p,
+                        Err(_) => {
+                            println!("Unable to parse input");
+                            continue;
                         }
                     };
+                    let bytecode = program.to_bytes();
+                    for byte in bytecode {
+                        self.vm.add_byte(byte);
+                    }
                     self.vm.run_once();
                 }
             }
@@ -88,6 +86,7 @@ impl REPL {
 
     /// Accepts a hexadecimal string WITHOUT a leading `0x` and returns a Vec of u8
     /// Example for a LOAD command: 01 01 03 E8
+    #[allow(dead_code)]
     fn parse_hex(&mut self, i: &str) -> Result<Vec<u8>, std::num::ParseIntError> {
         let split = i.split(" ").collect::<Vec<&str>>();
         let mut results: Vec<u8> = vec![];
@@ -96,12 +95,12 @@ impl REPL {
             match byte {
                 Ok(result) => {
                     results.push(result);
-                },
+                }
                 Err(e) => {
                     return Err(e);
                 }
             }
         }
-        return Ok(results);
+        Ok(results)
     }
 }

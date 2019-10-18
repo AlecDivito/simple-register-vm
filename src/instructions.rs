@@ -1,8 +1,9 @@
-
 /// Opcode are the possible commands can be used to tell the virtual machine to
 /// do something
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Opcode {
+    /// halt (stop) the currently running program
+    HLT,
     /// load a number into the specified register
     /// (ex. LOAD $0 #500, load 500 into register 0)
     LOAD,
@@ -50,8 +51,6 @@ pub enum Opcode {
     /// Jump If Not Equal, JNEQ $0
     /// If the equal flag is false, jump to instruction
     JNEQ,
-    /// halt (stop) the currently running program
-    HLT,
     /// Illegal opcode, opcode could not be found
     IGL,
 }
@@ -59,24 +58,50 @@ pub enum Opcode {
 impl From<u8> for Opcode {
     fn from(v: u8) -> Self {
         match v {
-            0 => return Opcode::HLT,
-            1 => return Opcode::LOAD,
-            2 => return Opcode::ADD,
-            3 => return Opcode::SUB,
-            4 => return Opcode::MUL,
-            5 => return Opcode::DIV,
-            7 => return Opcode::JMP,
-            8 => return Opcode::JMPF,
-            9 => return Opcode::JMPB,
-            10 => return Opcode::EQ,
-            11 => return Opcode::NEQ,
-            12 => return Opcode::GT,
-            13 => return Opcode::LT,
-            14 => return Opcode::GTEQ,
-            15 => return Opcode::LTEQ,
-            16 => return Opcode::JEQ,
-            17 => return Opcode::JNEQ,
-            _ => return Opcode::IGL
+            0 => Opcode::HLT,
+            1 => Opcode::LOAD,
+            2 => Opcode::ADD,
+            3 => Opcode::SUB,
+            4 => Opcode::MUL,
+            5 => Opcode::DIV,
+            7 => Opcode::JMP,
+            8 => Opcode::JMPF,
+            9 => Opcode::JMPB,
+            10 => Opcode::EQ,
+            11 => Opcode::NEQ,
+            12 => Opcode::GT,
+            13 => Opcode::LT,
+            14 => Opcode::GTEQ,
+            15 => Opcode::LTEQ,
+            16 => Opcode::JEQ,
+            17 => Opcode::JNEQ,
+            _ => Opcode::IGL,
+        }
+    }
+}
+
+impl From<&str> for Opcode {
+    fn from(v: &str) -> Self {
+        v.to_ascii_lowercase();
+        match v {
+            "hlt" => Opcode::HLT,
+            "load" => Opcode::LOAD,
+            "add" => Opcode::ADD,
+            "sub" => Opcode::SUB,
+            "mul" => Opcode::MUL,
+            "div" => Opcode::DIV,
+            "jmp" => Opcode::JMP,
+            "jmpf" => Opcode::JMPF,
+            "jmpb" => Opcode::JMPB,
+            "eq" => Opcode::EQ,
+            "neq" => Opcode::NEQ,
+            "gt" => Opcode::GT,
+            "lt" => Opcode::LT,
+            "gteq" => Opcode::GTEQ,
+            "lteq" => Opcode::LTEQ,
+            "jeq" => Opcode::JEQ,
+            "jneq" => Opcode::JNEQ,
+            _ => Opcode::IGL,
         }
     }
 }
@@ -85,18 +110,15 @@ impl From<u8> for Opcode {
 #[derive(Debug, PartialEq)]
 pub struct Instruction {
     /// Operation to execute
-    opcode: Opcode
+    opcode: Opcode,
 }
 
 impl Instruction {
     /// Create a new Instruction
     pub fn new(opcode: Opcode) -> Instruction {
-        Instruction {
-            opcode
-        }
+        Instruction { opcode }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
