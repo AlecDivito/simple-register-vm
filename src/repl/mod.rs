@@ -1,5 +1,5 @@
-use crate::assembler::program_parser::Program;
 use super::vm::VM;
+use crate::assembler::program_parser::Program;
 use std::io::Write;
 
 /// Read, Evaluate, and Print Loop
@@ -88,7 +88,7 @@ impl REPL {
     /// Example for a LOAD command: 01 01 03 E8
     #[allow(dead_code)]
     fn parse_hex(&mut self, i: &str) -> Result<Vec<u8>, std::num::ParseIntError> {
-        let split = i.split(" ").collect::<Vec<&str>>();
+        let split = i.split(' ').collect::<Vec<&str>>();
         let mut results: Vec<u8> = vec![];
         for hex_string in split {
             let byte = u8::from_str_radix(&hex_string, 16);
@@ -102,5 +102,11 @@ impl REPL {
             }
         }
         Ok(results)
+    }
+}
+
+impl Default for REPL {
+    fn default() -> Self {
+        Self::new()
     }
 }

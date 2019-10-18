@@ -49,7 +49,5 @@ mod test {
         let bytecode = program.to_bytes();
         assert_eq!(bytecode.len(), 4);
         assert_eq!(bytecode[0], Opcode::LOAD as u8);
-        println!("{:?}", bytecode);
-        assert!(false);
     }
 }

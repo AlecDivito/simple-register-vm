@@ -169,14 +169,14 @@ impl VM {
     fn decode_opcode(&mut self) -> Opcode {
         let opcode = Opcode::from(self.program[self.pc]);
         self.pc += 1;
-        return opcode;
+        opcode
     }
 
     /// Get the next byte off of the program stack
     fn next_8_bits(&mut self) -> u8 {
         let result = self.program[self.pc];
         self.pc += 1;
-        return result;
+        result
     }
 
     /// Get the next 2 bytes off of the program stack
@@ -184,7 +184,7 @@ impl VM {
         // read off 2 bytes from the stack, move the first byte up 8 bits
         let result = ((self.program[self.pc] as u16) << 8) | self.program[self.pc + 1] as u16;
         self.pc += 2;
-        return result;
+        result
     }
 
     pub fn add_byte(&mut self, byte: u8) {
@@ -197,6 +197,12 @@ impl VM {
 
     pub fn get_registers(&self) -> &[i32] {
         &self.registers
+    }
+}
+
+impl Default for VM {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

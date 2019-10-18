@@ -25,14 +25,14 @@ impl Token {
             return None;
         }
 
-        if register_iter.peek().is_none() {
+        if register_iter.peek() == None {
             return None;
         }
 
         let mut i = 1;
         while register_iter.peek().is_some() {
             if Token::is_digit(register_iter.next().unwrap()) {
-                i = i + 1;
+                i += 1;
             } else {
                 println!("not a digit");
                 return None;
@@ -55,7 +55,7 @@ impl Token {
             return None;
         }
 
-        if operand_iter.peek().is_none() {
+        if operand_iter.peek() == None {
             return None;
         }
 
@@ -63,7 +63,7 @@ impl Token {
         let mut i = 1;
         while operand_iter.peek().is_some() {
             if Token::is_digit(operand_iter.next().unwrap()) {
-                i = i + 1;
+                i += 1;
             } else {
                 return None;
             }
@@ -76,7 +76,7 @@ impl Token {
 
     pub fn opcode(&self) -> Option<Opcode> {
         match self {
-            Token::Op(o) => Some(o.clone()),
+            Token::Op(o) => Some(*o),
             _ => None,
         }
     }
